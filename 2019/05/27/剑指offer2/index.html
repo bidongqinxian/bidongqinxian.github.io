@@ -144,10 +144,9 @@
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                <h1 id="剑指Offer刷题心得体会（前序）"><a href="#剑指Offer刷题心得体会（前序）" class="headerlink" title="剑指Offer刷题心得体会（前序）"></a>剑指Offer刷题心得体会（前序）</h1><p>&emsp;&emsp;本人于2019年3月2日开始在牛客网上刷剑指offer，中间断断续续，有时候一天刷3，4道，有时候一天一道也没刷（吐槽下自己还是稍微有点懒惰的）。本来订的目标是两个月刷完66道，还好只比目标晚了20天（心里安慰下），于2019年5月22日刷完最后一道题。</p>
-<p>&emsp;&emsp;其间在被虐的同时，发现自己对编程思路有了很大的提升，特别是对各种数据结构有了更深的了解。但是毕竟一遍对我的帮助有限，面临找工作之际，希望能加深印象，因此在二刷的时候做个总结，巩固之前的知识点。</p>
-<p>&emsp;&emsp;我想66道题总共分6个文档完成，每个文档11题，按照<a href="https://www.nowcoder.com/ta/coding-interviews" target="_blank" rel="noopener">牛客网</a>上的题目和顺序逐一讲解。主要表述我总结的思路（有我个人的思路，也有集结网上大神的思路），不一定很全面，希望看到我博客的人对我能提出批评与指正，谢谢大家。</p>
-
+                <h1 id="剑指Offer刷题心得体会（一）"><a href="#剑指Offer刷题心得体会（一）" class="headerlink" title="剑指Offer刷题心得体会（一）"></a>剑指Offer刷题心得体会（一）</h1><h2 id="1-在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。"><a href="#1-在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。" class="headerlink" title="1. 在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。"></a>1. 在一个二维数组中（每个一维数组的长度相同），每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。</h2><p>思路：因为这个数组每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序，那么意味着每行最小值为第一个值，最大值为最后一个值；同理，每列最小值是第一个值，最大值为最后一个值。因此，我们可以通过左上角或者右下角元素开始查找。左下角是每列最大值和每行最小值，因此当目标数比这个值大的时候，向右移动（列指针加1）；当目标数比这个值小的时候，向上移动（行指针减一），直到找到相等数或者出数组。同理，对于右下角元素为初始值来说，当目标数比这个值大的时候，向下移动（行指针加1）；当目标数比这个值小的时候，向左移动（列指针减一），直到找到相等数或者出数组。</p>
+<p>python代码（设初始值为右上角元素）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">class Solution:</span><br><span class="line">    # array 二维列表</span><br><span class="line">    def Find(self, target, array):</span><br><span class="line">        # write code here</span><br><span class="line">        if not array or not target:</span><br><span class="line">            return False</span><br><span class="line">        row = 0</span><br><span class="line">        line = len(array[0])-1</span><br><span class="line">        while row &lt;= len(array)-1 and line &gt;= 0:</span><br><span class="line">            if target &lt; array[row][line]:</span><br><span class="line">                line -= 1</span><br><span class="line">            elif target &gt; array[row][line]:</span><br><span class="line">                row += 1</span><br><span class="line">            elif target == array[row][line]:</span><br><span class="line">                return True</span><br><span class="line">        return False</span><br></pre></td></tr></table></figure>
             </div>
 
             <!-- Post Comments -->
@@ -209,8 +208,8 @@ $('.btn_click_load').click(function() {
 -->
 <script type="text/javascript">
     var disqus_config = function () {
-        this.page.url = 'http://yoursite.com/2019/05/27/剑指offer1/';  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://yoursite.com/2019/05/27/剑指offer1/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://yoursite.com/2019/05/27/剑指offer2/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2019/05/27/剑指offer2/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 </script>
 
