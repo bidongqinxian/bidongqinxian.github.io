@@ -150,7 +150,9 @@
 <li>$i$, $j$索引值遍历起点终点；</li>
 <li>$f[i][j]和f[j]$的初始化问题。</li>
 </ul>
-<p>对于问题一，首先$i$肯定是从0开始到物体个数$N$遍历。对于$j$，首先分析第一种情况，它的范围是从0开始到最大体积$V$，因为我们物体的体积是正值，所以需要当前总体积$j$-物体体积$v[i]$大于0才能使用状态方程。对与第二种优化方法，$j$的起点是$V$，终点是当前物体体积$v[i]$，为什么不跟上述一样从0到$V$呢？原因在于</p>
+<p>对于问题一，首先$i$肯定是从0开始到物体个数$N$遍历。对于$j$，首先分析第一种情况，它的范围是从0开始到最大体积$V$，因为我们物体的体积是正值，所以需要当前总体积$j$-物体体积$v[i]$大于0才能使用状态方程。对与第二种优化方法，$j$的起点是$V$，终点是当前物体体积$v[i]$，为什么不跟上述一样从0到$V$呢？原因在于如果从0升到$V$，此时$f[j]$表示的是第i个物体，但是我们需要计算的是前$i-1$个物体（$f[i-1][j]$），所以需要从后往前，此时第$i-1$在第$i$个后面，所以就从$V$到$v[i]$。</p>
+<p>对于问题二，我的理解是初始化为0就是不需要放满，初始化为负无穷则是需要放满，因为，如果需要选择前$i$个物品时，此时初始化为负无穷，代表无论怎么选都不能满足放满策略。</p>
+<p>附上一段我写的python代码（OJ）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">lst = list(map(int, input().split()))</span><br><span class="line">N = lst[0]</span><br><span class="line">V = lst[1]</span><br><span class="line">n = N</span><br><span class="line">v = []</span><br><span class="line">w = []</span><br><span class="line">count = [0 for i in range(V+1)]</span><br><span class="line">while n:</span><br><span class="line">    tmp = list(map(int, input().split()))</span><br><span class="line">    v.append(tmp[0])</span><br><span class="line">    w.append(tmp[1])</span><br><span class="line">    n -= 1</span><br><span class="line">for i in range(N):</span><br><span class="line">    for j in range(V,v[i]-1,-1):</span><br><span class="line">            count[j] = max(count[j],count[j-v[i]]+w[i])</span><br><span class="line">print(str(count[V]))</span><br></pre></td></tr></table></figure>
             </div>
 
