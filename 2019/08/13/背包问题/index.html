@@ -142,16 +142,16 @@
 <p><font color="yellow" size="3">例题</font>：<br>有 $N$ 件物品和一个容量是 $V$ 的背包。每件物品只能使用一次。</p>
 <p>第 $i$ 件物品的体积是 $v_i$，价值是 $w_i$。</p>
 <p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。<br>输出最大价值。</p>
-<p><font color="red" size="3">分析</font>：我们需要求输出价值最大，并且条件是物体总体积不超过背包大小，那么我现在能不能假设已知上一步已将第$（i-1）$个物品放入背包中，并且该物体价值为$w_i(i-1)$，目前这一步剩余空间为$V_i-v_{i-1}$，其中$V_i$为上一步剩余空间。那么定义前$i$个物体，总体积为$j$的总价值为f[i][j]，那么应该有“01”两种策略，即拿第i个物体和不拿第i个物体。当不拿第i个物体的时候，总价值为f[i-1][j]；当拿第i个物体时，这时总价值为：<br>f[i][j] = f[i-1][j-v[i]]+w[i]。我们只需要这部分值为最大就可以递归实现总体价值最大，即其状态方程为：</p>
-<p>f[i][j] = max(f[i-1][j], f[i-1][j-v[i]]+w[i])</p>
-<p>由上可见其max里左右两项都包含f[i-1]项，那么我们是不是可以省去i这一维度呢？其实是可以的。因为我们可以把i当作列表的索引值，当前i只与i-1有直接关系，所以我们将f[i][j]降为1维数组，即f[j]，则上述状态方程可化为：</p>
-<p>f[j] = max(f[j], f[j-v[i]]+w[i])</p>
+<p><font color="red" size="3">分析</font>：我们需要求输出价值最大，并且条件是物体总体积不超过背包大小，那么我现在能不能假设已知上一步已将第$（i-1）$个物品放入背包中，并且该物体价值为$w_i(i-1)$，目前这一步剩余空间为$V_i-v_{i-1}$，其中$V_i$为上一步剩余空间。那么定义前$i$个物体，总体积为$j$的总价值为$f[i][j]$，那么应该有“01”两种策略，即拿第i个物体和不拿第$i$个物体。当不拿第$i$个物体的时候，总价值为$f[i-1][j]$；当拿第i个物体时，这时总价值为：<br>$f[i][j] = f[i-1][j-v[i]]+w[i]$。我们只需要这部分值为最大就可以递归实现总体价值最大，即其状态方程为：</p>
+<p>$$f[i][j] = max(f[i-1][j], f[i-1][j-v[i]]+w[i])$$</p>
+<p>由上可见其max里左右两项都包含$f[i-1]$项，那么我们是不是可以省去$i$这一维度呢？其实是可以的。因为我们可以把$i$当作列表的索引值，当前$i$只与$i-1$有直接关系，所以我们将$f[i][j]$降为1维数组，即$f[j]$，则上述状态方程可化为：</p>
+<p>$$f[j] = max(f[j], f[j-v[i]]+w[i])$$</p>
 <p>这里有两点需要特别注意：</p>
 <ul>
-<li>i, j索引值遍历起点终点；</li>
-<li>f[i][j]和f[j]的初始化问题。</li>
+<li>$i$, $j$索引值遍历起点终点；</li>
+<li>$f[i][j]和f[j]$的初始化问题。</li>
 </ul>
-<p>对于问题一，首先i肯定是从0开始到物体个数N遍历。对于j，首先分析第一种情况，它的范围是从0开始到最大体积V，因为我们物体的体积是正值，所以需要当前总体积j-物体体积v[i]大于0才能使用状态方程。对与第二种优化方法，j的起点是V，终点是当前物体体积v[i]，为什么不跟上述一样从0到V呢？原因在于</p>
+<p>对于问题一，首先$i$肯定是从0开始到物体个数$N$遍历。对于$j$，首先分析第一种情况，它的范围是从0开始到最大体积$V$，因为我们物体的体积是正值，所以需要当前总体积$j$-物体体积$v[i]$大于0才能使用状态方程。对与第二种优化方法，$j$的起点是$V$，终点是当前物体体积$v[i]$，为什么不跟上述一样从0到$V$呢？原因在于</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">lst = list(map(int, input().split()))</span><br><span class="line">N = lst[0]</span><br><span class="line">V = lst[1]</span><br><span class="line">n = N</span><br><span class="line">v = []</span><br><span class="line">w = []</span><br><span class="line">count = [0 for i in range(V+1)]</span><br><span class="line">while n:</span><br><span class="line">    tmp = list(map(int, input().split()))</span><br><span class="line">    v.append(tmp[0])</span><br><span class="line">    w.append(tmp[1])</span><br><span class="line">    n -= 1</span><br><span class="line">for i in range(N):</span><br><span class="line">    for j in range(V,v[i]-1,-1):</span><br><span class="line">            count[j] = max(count[j],count[j-v[i]]+w[i])</span><br><span class="line">print(str(count[V]))</span><br></pre></td></tr></table></figure>
             </div>
 
