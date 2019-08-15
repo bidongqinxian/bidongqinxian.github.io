@@ -154,13 +154,16 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">lst = list(map(int, input().split()))</span><br><span class="line">N = lst[0]</span><br><span class="line">V = lst[1]</span><br><span class="line">n = N</span><br><span class="line">v = []</span><br><span class="line">w = []</span><br><span class="line">count = [0 for i in range(V+1)]</span><br><span class="line">while n:</span><br><span class="line">    tmp = list(map(int, input().split()))</span><br><span class="line">    v.append(tmp[0])</span><br><span class="line">    w.append(tmp[1])</span><br><span class="line">    n -= 1</span><br><span class="line">for i in range(N):</span><br><span class="line">    for j in range(V,v[i]-1,-1):</span><br><span class="line">            count[j] = max(count[j],count[j-v[i]]+w[i])</span><br><span class="line">print(str(count[V]))</span><br></pre></td></tr></table></figure>
 <h2 id="二、完全背包"><a href="#二、完全背包" class="headerlink" title="二、完全背包"></a>二、完全背包</h2><p>注解：本人理解的完全背包是在“01”背包的基础上进一步泛化：我们现在对每一种物体不止能选择一次，还能选择多次。如前面的例子“有个小偷背着能容纳6kg的东西，现在店里有4种物品，第一种是1kg重价值2元，第二种是2kg价值3元，第三种是4kg重价值5元，第四种是6kg重价值6元”的情况下，我们都选择1kg重的可实现效益最大化12元，这就是完全背包算法解决的情况。同样我们根据一个例子来分析。</p>
 <p><font color="yellow" size="3">例题</font>：<br>有 $N$ 件物品和一个容量是 $V$ 的背包。每件物品能使用多次。<br>第 $i$ 件物品的体积是 $v_i$，价值是 $w_i$。<br>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。<br>输出最大价值。</p>
-<p><font color="red" size="3">分析</font>：我们这里直接从$f[j]$分析。首先，既然一个物品可以选择多次，那么意味着可以在“01”背包的基础上重复$k$次选择，那么可以写成这样<br>$$f[j] = max(f[j], f[j-k<em>v[i]]+k</em>w[i])$$<br>事实上，这是增加了$k$倍的时间复杂度，有没有优化的算法呢？有，让本来$j$从$V$降到$v[i]$变为从$v[i]$升到$V$即可。原因？可以从数学角度证明。这里采用数学归纳法证明。</p>
+<p><font color="red" size="3">分析</font>：我们这里直接从$f[j]$分析。首先，既然一个物品可以选择多次，那么意味着可以在“01”背包的基础上重复$k$次选择，那么可以写成这样</p>
+<p>$f[j] = max(f[j], f[j-k<em>v[i]]+k</em>w[i])$</p>
+<p>事实上，这是增加了$k$倍的时间复杂度，有没有优化的算法呢？有，让本来$j$从$V$降到$v[i]$变为从$v[i]$升到$V$即可。原因？可以从数学角度证明。这里采用数学归纳法证明。</p>
 <p>对于$i=0$来说，自然成立。</p>
-<p>对于第$i$个物品选择之后来说，递归过程如下：<br>$$f[j] = max(f[j], f[j-k<em>v[i]]+k</em>w[i]))$$</p>
-<p>$$f[j] = max(f[j], f[j-(k-1)<em>v[i]]+(k-1)</em>w[i]))]$$</p>
-<p>$$…$$</p>
-<p>$$f[j] = max(f[j], f[j-2<em>v[i]]+2</em>w[i])$$</p>
-<p>$$f[j] = max(f[j], f[j-v[i]]+w[i])$$</p>
+<p>对于第$i$个物品选择之后来说，递归过程如下：</p>
+<p>$f[j] = max(f[j], f[j-k<em>v[i]]+k</em>w[i]))$</p>
+<p>$f[j] = max(f[j], f[j-(k-1)<em>v[i]]+(k-1)</em>w[i]))]$</p>
+<p>$…$</p>
+<p>$f[j] = max(f[j], f[j-2<em>v[i]]+2</em>w[i])$</p>
+<p>$f[j] = max(f[j], f[j-v[i]]+w[i])$</p>
 <p>所以可以证明$j$满足从$v[i]$升到$V$。</p>
 <p>python代码如下(OJ)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">N, V = map(int, input().split())</span><br><span class="line">n = N</span><br><span class="line">v = []</span><br><span class="line">w = []</span><br><span class="line">while n:</span><br><span class="line">    tmp = list(map(int, input().split()))</span><br><span class="line">    v.append(tmp[0])</span><br><span class="line">    w.append(tmp[1])</span><br><span class="line">    n -= 1</span><br><span class="line">count = [0 for i in range(V+1)]</span><br><span class="line">for i in range(N):</span><br><span class="line">    for j in range(v[i],V+1):</span><br><span class="line">            count[j] = max(count[j-v[i]]+w[i], count[j])</span><br><span class="line">print(str(count[V]))</span><br></pre></td></tr></table></figure></p>
 <h2 id="三、多重背包"><a href="#三、多重背包" class="headerlink" title="三、多重背包"></a>三、多重背包</h2><p>注解：多重背包就是限定物品拿的次数，比如说第一种物品只能拿3次，第二种物品只能拿5次。。。是“01”背包的另一个变种。同样我们根据一个例子来分析。</p>
